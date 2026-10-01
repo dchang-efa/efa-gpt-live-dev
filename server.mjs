@@ -38,9 +38,12 @@ app.post(
       origin: req.get("origin") ?? null,
     });
 
-    const browserSdp = typeof req.body === "string" ? req.body.trim() : "";
+    const browserSdp =
+      typeof req.body === "string"
+        ? req.body
+        : "";
 
-    if (!browserSdp) {
+    if (!browserSdp.trim()) {
       res.status(400).json({
         error: "missing_sdp",
       });
@@ -67,7 +70,7 @@ app.post(
         error && typeof error === "object"
           ? error
           : {};
-    
+
       console.error("[GPT-Live Session] OpenAI request failed", {
         status: "status" in err ? err.status : null,
         message: "message" in err ? err.message : null,
@@ -82,7 +85,7 @@ app.post(
               : null,
         error: "error" in err ? err.error : null,
       });
-    
+
       res.status(502).json({
         error: "gpt_live_session_failed",
       });
