@@ -63,15 +63,26 @@ app.post(
         transport: live.transport,
       });
     } catch (error) {
-      const status =
-        error && typeof error === "object" && "status" in error
-          ? error.status
-          : null;
-
+      const err =
+        error && typeof error === "object"
+          ? error
+          : {};
+    
       console.error("[GPT-Live Session] OpenAI request failed", {
-        status,
+        status: "status" in err ? err.status : null,
+        message: "message" in err ? err.message : null,
+        code: "code" in err ? err.code : null,
+        type: "type" in err ? err.type : null,
+        param: "param" in err ? err.param : null,
+        requestId:
+          "request_id" in err
+            ? err.request_id
+            : "requestID" in err
+              ? err.requestID
+              : null,
+        error: "error" in err ? err.error : null,
       });
-
+    
       res.status(502).json({
         error: "gpt_live_session_failed",
       });
