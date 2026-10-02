@@ -87,6 +87,8 @@ app.post(
         - The user completes a homework step or activity.
         - The answer depends on client-specific information.
         - The user's response could change application or session state.
+        - The user asks to start a new chat, start over, restart the conversation,
+  or otherwise reset/restart the conversational flow.
         
         Do not delegate to the backend when:
         - The user greets you.
