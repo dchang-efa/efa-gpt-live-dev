@@ -3,14 +3,17 @@ import express from "express";
 import OpenAI from "openai";
 
 const apiKey = process.env.OPENAI_API_KEY?.trim();
-const allowedOrigin = process.env.ALLOWED_ORIGIN?.trim();
+const allowedOrigins = (process.env.ALLOWED_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 const port = Number.parseInt(process.env.PORT || "3000", 10);
 
 if (!apiKey) {
   throw new Error("[GPT-Live Session] OPENAI_API_KEY is required");
 }
 
-if (!allowedOrigin) {
+if (allowedOrigins.length === 0) {
   throw new Error("[GPT-Live Session] ALLOWED_ORIGIN is required");
 }
 
@@ -22,7 +25,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin: allowedOrigins,
   })
 );
 
